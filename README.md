@@ -1,7 +1,7 @@
 NRediSearch
 ===================
 
-For all documentation, [see here](https://stackexchange.github.io/NRediSearch/).
+.NET Client library for [RediSearch](https://github.com/RediSearch/RediSearch) built on StackExchange.Redis. See 
 
 #### Package Status
 
