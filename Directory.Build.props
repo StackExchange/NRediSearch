@@ -10,6 +10,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleset>$(MSBuildThisFileDirectory)Shared.ruleset</CodeAnalysisRuleset>
     <MSBuildWarningsAsMessages>NETSDK1069</MSBuildWarningsAsMessages>
+    <PackageReleaseNotes>https://stackexchange.github.io/NRediSearch/ReleaseNotes</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/StackExchange/NRediSearch/</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
