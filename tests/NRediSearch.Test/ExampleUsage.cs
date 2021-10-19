@@ -5,7 +5,7 @@ using Xunit;
 using Xunit.Abstractions;
 using static NRediSearch.Client;
 
-namespace NRediSearch.Test
+namespace NRediSearch.Tests
 {
     public class ExampleUsage : RediSearchTestBase
     {

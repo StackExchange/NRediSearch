@@ -15,14 +15,13 @@ Mono/
 *.orig
 RedisConfigs/*.dat
 RedisQFork*.dat
-StackExchange.Redis.*.zip
 .idea/
 .vs/
 .vscode/
 *.lock.json
 test-results*.xml
 packages/
-StackExchange.Redis.Tests/*Config.json
+NRediSearch.Tests/*Config.json
 t8.shakespeare.txt
 launchSettings.json
 *.vsp

@@ -7,7 +7,7 @@ using Xunit;
 using Xunit.Abstractions;
 using static NRediSearch.Client;
 
-namespace NRediSearch.Test.ClientTests
+namespace NRediSearch.Tests.ClientTests
 {
     public class AggregationBuilderTests : RediSearchTestBase
     {
@@ -173,7 +173,7 @@ namespace NRediSearch.Test.ClientTests
                 .SortBy(10, SortedField.Descending("@sum"))
                 .Cursor(1, 1000);
 
-            await Task.Delay(1000).ForAwait();
+            await Task.Delay(1000).ConfigureAwait(false);
 
             try
             {

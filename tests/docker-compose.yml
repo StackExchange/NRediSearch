@@ -1,0 +1,7 @@
+version: '2.5'
+
+services:
+  redisearch:
+    image: redislabs/redisearch:latest
+    ports:
+      - 6385:6379

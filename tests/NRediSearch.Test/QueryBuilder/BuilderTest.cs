@@ -10,7 +10,7 @@ using static NRediSearch.Aggregation.SortedField;
 using static NRediSearch.QueryBuilder.QueryBuilder;
 using static NRediSearch.QueryBuilder.Values;
 
-namespace NRediSearch.Test.QueryBuilder
+namespace NRediSearch.Tests.QueryBuilder
 {
     public class BuilderTest : RediSearchTestBase
     {

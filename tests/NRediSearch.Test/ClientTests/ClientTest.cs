@@ -11,7 +11,7 @@ using static NRediSearch.Schema;
 using static NRediSearch.SuggestionOptions;
 
 
-namespace NRediSearch.Test.ClientTests
+namespace NRediSearch.Tests.ClientTests
 {
     public class ClientTest : RediSearchTestBase
     {

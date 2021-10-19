@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace NRediSearch.Test
+namespace NRediSearch.Tests
 {
     public class Issue940
     {

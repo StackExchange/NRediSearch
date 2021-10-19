@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 
-namespace NRediSearch.Test
+namespace NRediSearch.Tests
 {
     public class QueryTest
     {

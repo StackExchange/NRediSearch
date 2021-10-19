@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using StackExchange.Redis;
-using StackExchange.Redis.Tests;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace NRediSearch.Test
+namespace NRediSearch.Tests
 {
     [Collection(nameof(NonParallelCollection))]
     public abstract class RediSearchTestBase : IDisposable
@@ -33,10 +32,10 @@ namespace NRediSearch.Test
         protected Client GetClient([CallerFilePath] string filePath = null, [CallerMemberName] string caller = null)
         {
             // Remove all that extra pathing
-            var offset = filePath?.IndexOf("NRediSearch.Test");
+            var offset = filePath?.IndexOf("NRediSearch.Tests");
             if (offset > -1)
             {
-                filePath = filePath.Substring(offset.Value + "NRediSearch.Test".Length + 1);
+                filePath = filePath.Substring(offset.Value + "NRediSearch.Tests".Length + 1);
             }
 
             var indexName = $"{filePath}:{caller}";
@@ -89,7 +88,7 @@ namespace NRediSearch.Test
                 ConnectTimeout = 2000,
                 SyncTimeout = 15000,
             };
-            static void InstanceMissing() => Skip.Inconclusive("NRedisSearch instance available at " + TestConfig.Current.RediSearchServerAndPort);
+            static void InstanceMissing() => Skip.Inconclusive("NRediSearch instance available at " + TestConfig.Current.RediSearchServerAndPort);
             // Don't timeout every single test - optimization
             if (instanceMissing)
             {
@@ -100,9 +99,10 @@ namespace NRediSearch.Test
             try
             {
                 conn = ConnectionMultiplexer.Connect(options);
-                conn.MessageFaulted += (msg, ex, origin) => output.WriteLine($"Faulted from '{origin}': '{msg}' - '{(ex == null ? "(null)" : ex.Message)}'");
-                conn.Connecting += (e, t) => output.WriteLine($"Connecting to {Format.ToString(e)} as {t}");
-                conn.Closing += complete => output.WriteLine(complete ? "Closed" : "Closing...");
+                // Internal and not exposed on the NuGet version
+                //conn.MessageFaulted += (msg, ex, origin) => output.WriteLine($"Faulted from '{origin}': '{msg}' - '{(ex == null ? "(null)" : ex.Message)}'");
+                //conn.Connecting += (e, t) => output.WriteLine($"Connecting to {Format.ToString(e)} as {t}");
+                //conn.Closing += complete => output.WriteLine(complete ? "Closed" : "Closing...");
             }
             catch (RedisConnectionException)
             {
@@ -131,7 +131,7 @@ namespace NRediSearch.Test
             if (!found)
             {
                 output?.WriteLine("Module not found.");
-                throw new RedisException("NRedisSearch module missing on " + TestConfig.Current.RediSearchServerAndPort);
+                throw new RedisException("NRediSearch module missing on " + TestConfig.Current.RediSearchServerAndPort);
             }
             return conn;
         }
