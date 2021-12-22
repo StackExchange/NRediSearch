@@ -9,7 +9,7 @@ using NRediSearch.Aggregation;
 using static NRediSearch.Client;
 using static NRediSearch.Schema;
 using static NRediSearch.SuggestionOptions;
-
+using System.Threading.Tasks;
 
 namespace NRediSearch.Tests.ClientTests
 {
@@ -1155,6 +1155,81 @@ namespace NRediSearch.Tests.ClientTests
             Assert.Equal(1, res.TotalResults);
             Assert.Equal("king:1", res.Documents[0].Id);
             Assert.Equal("{\"name\":\"henry\"}", res.Documents[0]["json"]);
+        }
+
+        [Fact]
+        public async Task TestJsonSearchProp()
+        {
+            if (getModuleSearchVersion() <= 20200)
+            {
+                return;
+            }
+
+            Client cl = GetClient();
+            IndexDefinition defenition = new IndexDefinition(prefixes: new string[] { "hero:" }, type: IndexDefinition.IndexType.Json);
+            Schema sc = new Schema()
+                                .AddSortableTextField("$.name")
+                                .AddTextField("$.desc")
+                                .AddSortableTextField("$.address.city");
+            Assert.True(await cl.CreateIndexAsync(sc, new ConfiguredIndexOptions(defenition)));
+
+            await Db.ExecuteAsync("JSON.SET", "hero:1", ".", "{\"name\":\"harry\",\"lastName\":\"potter\",\"desc\":\"It's going to shock you\",\"email\":\"potter@mock.com\",\"address\":{\"city\":\"London\",\"street\":\"Privet Drive\",\"house\":\"5\"}}");
+            await Db.ExecuteAsync("JSON.SET", "hero:2", ".", "{\"name\":\"GEORGE\",\"lastName\":\"WEASLEY\",\"desc\":\"go home\",\"email\":\"georgew@mock.com\"}");
+            await Db.ExecuteAsync("JSON.SET", "hero:3", ".", "{\"name\":\"FRED\",\"lastName\":\"WEASLEY\",\"desc\":\"live home\",\"email\":\"fredw@mock.com\"}");
+
+            // Query
+            SearchResult res = cl.Search(new Query("@desc:go"));
+            Assert.Equal(2, res.TotalResults);
+        }
+
+        [Fact]
+        public async Task TestJsonSearchPropWithAttribute()
+        {
+            if (getModuleSearchVersion() <= 20200)
+            {
+                return;
+            }
+
+            Client cl = GetClient();
+            IndexDefinition defenition = new IndexDefinition(prefixes: new string[] { "hero:" }, type: IndexDefinition.IndexType.Json);
+            Schema sc = new Schema()
+                                .AddSortableTextField("$.name")
+                                .AddTextField(FieldName.Of("$.desc").As("description"))
+                                .AddSortableTextField("$.address.city");
+            Assert.True(await cl.CreateIndexAsync(sc, new ConfiguredIndexOptions(defenition)));
+
+            await Db.ExecuteAsync("JSON.SET", "hero:1", ".", "{\"name\":\"harry\",\"lastName\":\"potter\",\"desc\":\"It's going to shock you\",\"email\":\"potter@mock.com\",\"address\":{\"city\":\"London\",\"street\":\"Privet Drive\",\"house\":\"5\"}}");
+            await Db.ExecuteAsync("JSON.SET", "hero:2", ".", "{\"name\":\"GEORGE\",\"lastName\":\"WEASLEY\",\"desc\":\"go home\",\"email\":\"georgew@mock.com\"}");
+            await Db.ExecuteAsync("JSON.SET", "hero:3", ".", "{\"name\":\"FRED\",\"lastName\":\"WEASLEY\",\"desc\":\"live home\",\"email\":\"fredw@mock.com\"}");
+
+            // Query
+            SearchResult res = cl.Search(new Query("@description:go"));
+            Assert.Equal(2, res.TotalResults);
+        }
+
+        [Fact]
+        public async Task TestJsonSearch()
+        {
+            if (getModuleSearchVersion() <= 20200)
+            {
+                return;
+            }
+
+            Client cl = GetClient();
+            IndexDefinition defenition = new IndexDefinition(prefixes: new string[] { "hero:" }, type: IndexDefinition.IndexType.Json);
+            Schema sc = new Schema()
+                                .AddSortableTextField("$.name")
+                                .AddTextField("$.desc")
+                                .AddSortableTextField("$.address.city");
+            Assert.True(await cl.CreateIndexAsync(sc, new ConfiguredIndexOptions(defenition)));
+
+            await Db.ExecuteAsync("JSON.SET", "hero:1", ".", "{\"name\":\"harry\",\"lastName\":\"potter\",\"desc\":\"It's going to shock you\",\"email\":\"potter@mock.com\",\"address\":{\"city\":\"London\",\"street\":\"Privet Drive\",\"house\":\"5\"}}");
+            await Db.ExecuteAsync("JSON.SET", "hero:2", ".", "{\"name\":\"GEORGE\",\"lastName\":\"WEASLEY\",\"desc\":\"go home\",\"email\":\"georgew@mock.com\"}");
+            await Db.ExecuteAsync("JSON.SET", "hero:3", ".", "{\"name\":\"FRED\",\"lastName\":\"WEASLEY\",\"desc\":\"live home\",\"email\":\"fredw@mock.com\"}");
+
+            // Query
+            SearchResult res = cl.Search(new Query("go"));
+            Assert.Equal(2, res.TotalResults);
         }
     }
 }

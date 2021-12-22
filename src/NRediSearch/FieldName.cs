@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace NRediSearch
 {
@@ -12,7 +12,10 @@ namespace NRediSearch
 
         public FieldName(string name, string attribute) {
             this.name = name;
-            this.attribute = attribute;
+            if (attribute == null && name.StartsWith("$."))
+                this.attribute = name.Substring(2);
+            else
+                this.attribute = attribute;
         }
 
         public int AddCommandArguments(List<object> args) {
