@@ -9,7 +9,8 @@ namespace NRediSearch
 
         public string IndexName => GetString("index_name");
 
-        public Dictionary<string, RedisResult[]> Fields => GetRedisResultsDictionary("fields");
+        public Dictionary<string, RedisResult[]> Fields => GetRedisResultsDictionary("fields", dictionaryIndex: 0)
+                                                            ?? GetRedisResultsDictionary("attributes", dictionaryIndex: 1);
 
         public long NumDocs => GetLong("num_docs");
 
@@ -105,7 +106,7 @@ namespace NRediSearch
             }
         }
 
-        private Dictionary<string, RedisResult[]> GetRedisResultsDictionary(string key)
+        private Dictionary<string, RedisResult[]> GetRedisResultsDictionary(string key, int dictionaryIndex)
         {
             if (_all.TryGetValue(key, out var value))
             {
@@ -113,7 +114,7 @@ namespace NRediSearch
 
                 foreach (RedisResult[] fv in (RedisResult[])value)
                 {
-                    result.Add((string)fv[0], fv);
+                    result.Add((string)fv[dictionaryIndex], fv);
                 }
 
                 return result;
